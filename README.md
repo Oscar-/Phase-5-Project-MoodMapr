@@ -38,18 +38,17 @@ React Routes:
 
 7. Three **stretch goals**:
 
-1. Integrate OpenAI API for AI Chatbot Interaction
-2. Allow Users to Share Itineraries
-3. Allow Users to Recommend New Places
-4. Notify Users of New Places
-5. Plan Future Trips
-6. Allow Reservations to Be Placed Using the App
-7. Use Reservation Data to Advise Places on Incoming Traffic
-8. Add a Map to Display Locations & Places
-9. Add the Following Models to Enhance the App: Review,Activity, Category, Recommendation, Visit History, Image, Tag, Location Type
+   - Integrate OpenAI API for AI Chatbot Interaction
+   - Allow Users to Share Itineraries
+   - Allow Users to Recommend New Places
+   - Notify Users of New Places
+   - Plan Future Trips
+   - Allow Reservations to Be Placed Using the App
+   - Use Reservation Data to Advise Places on Incoming Traffic
+   - Add a Map to Display Locations & Places
+   - Add the Following Models to Enhance the App: Review,Activity, Category, Recommendation, Visit History, Image, Tag, Location Type
     
     
-
 
 8. **Kanban board**:
 
