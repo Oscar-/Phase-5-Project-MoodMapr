@@ -47,6 +47,7 @@ React Routes:
 7. Use Reservation Data to Advise Places on Incoming Traffic
 8. Add a Map to Display Locations & Places
 9. Add the Following Models to Enhance the App: Review,Activity, Category, Recommendation, Visit History, Image, Tag, Location Type
+    
 
 
 8. **Kanban board**:
@@ -57,5 +58,6 @@ React Routes:
 9. What new **tech** you will be using and how: ex. CSS packages (Material-UI, ReactBootstrap, Tailwind), deployment, useContext/Redux, etc:
 
 OpenAI api
+
 GoogleMaps or similar 
 
