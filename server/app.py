@@ -267,26 +267,57 @@ class SinglePlace(Resource):
         db.session.commit()
 
         return jsonify({'message': 'Place deleted successfully'})
-
-class PlaceByCity(Resource):
+    
+class PlacesByLocation(Resource):
     def get(self):
-        # Get the city from the query parameter
-        city = request.args.get('city', None)
+        city_name = request.args.get('city', '').strip().lower()  # Get the city query parameter and convert to lowercase
 
-        if city:
-            # Query places that belong to the city by joining with Location
-            places = Place.query.join(Location).filter(Location.city_name == city).all()
-        else:
-            # If no city provided, return all places
-            places = Place.query.all()
+        if not city_name:
+            return {'message': 'City parameter is required'}, 400
+
+        # Query locations based on city_name using ilike for case-insensitive search
+        location = Location.query.filter(Location.city_name.ilike(f'%{city_name}%')).first()
+
+        if not location:
+            return {'message': 'No locations found for this city'}, 404
+
+        # Query places based on location_id
+        places = Place.query.filter_by(location_id=location.id).all()
+
+        if not places:
+            return {'message': 'No places found for this location'}, 404
 
         return jsonify([{
             'id': place.id,
             'name': place.name,
             'description': place.description,
             'image': place.image,
-            'link': place.link,
-            'location_id': place.location_id,
+            'link': place.link
+        } for place in places])
+    
+class PlacesByMood(Resource):
+    def get(self):
+        mood_name = request.args.get('mood')
+        if not mood_name:
+            return {'message': 'Mood parameter is required'}, 400
+
+        # Query moods based on mood_name
+        mood = Mood.query.filter_by(feeling_name=mood_name).first()
+        if not mood:
+            return {'message': 'No mood found for this name'}, 404
+
+        # Query places associated with the mood
+        places = Place.query.join(Place.moods).filter(Mood.feeling_name == mood_name).all()
+
+        if not places:
+            return {'message': 'No places found for this mood'}, 404
+
+        return jsonify([{
+            'id': place.id,
+            'name': place.name,
+            'description': place.description,
+            'image': place.image,
+            'link': place.link
         } for place in places])
 
 # ------------------- Location API -------------------
@@ -439,11 +470,13 @@ api.add_resource(SingleMood, '/moods/<int:mood_id>')
 
 api.add_resource(PlaceList, '/places')
 api.add_resource(SinglePlace, '/places/<int:place_id>')
-api.add_resource(PlaceByCity, '/places/city')
 
 
 api.add_resource(LocationList, '/locations')
 api.add_resource(SingleLocation, '/locations/<int:location_id>')
+
+api.add_resource(PlacesByLocation, '/places/by_location')
+api.add_resource(PlacesByMood, '/places/by_mood')
 
 api.add_resource(FavoriteList, '/favorites')
 api.add_resource(SingleFavorite, '/favorites/<int:favorite_id>')

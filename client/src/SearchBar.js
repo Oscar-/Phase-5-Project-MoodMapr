@@ -1,28 +1,32 @@
 import React, { useState } from 'react';
 
 function SearchBar() {
-    const [city, setCity] = useState('');  // Holds the city input from the user
-    const [places, setPlaces] = useState([]);  // Holds the filtered places based on city
+    const [location, setLocation] = useState('');  // Holds the location input from the user
+    const [places, setPlaces] = useState([]);  // Holds filtered places based on location
     const [error, setError] = useState('');  // Holds error messages
+    const [fetching, setFetching] = useState(false);  // Loading state
 
     const handleSearch = (e) => {
         e.preventDefault();
+        setFetching(true);
 
-        // Fetch places based on city input
-        fetch(`http://127.0.0.1:5000/places/city?city=${city}`)
-            .then((response) => {
+        fetch(`http://127.0.0.1:5555/places/by_location?city=${location}`)
+            .then(response => {
                 if (!response.ok) {
-                    throw new Error('No places found for this city.');
+                    throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
-            .then((data) => {
-                setPlaces(data);  // Store the filtered places in state
-                setError('');  // Clear any previous errors
+            .then(data => {
+                setPlaces(data);
+                setError('');
             })
-            .catch((error) => {
-                setError(error.message);  // Display error message
-                setPlaces([]);  // Clear the places in case of an error
+            .catch(error => {
+                setError(`Error fetching places: ${error.message}`);
+                console.error('Fetch error:', error);
+            })
+            .finally(() => {
+                setFetching(false);
             });
     };
 
@@ -32,25 +36,28 @@ function SearchBar() {
                 <input
                     type="text"
                     placeholder="Search by city"
-                    value={city}  // Bind the input value to the city state
-                    onChange={(e) => setCity(e.target.value)}  // Update state when user types
+                    value={location}  // Bind the input value to the location state
+                    onChange={(e) => setLocation(e.target.value)}  // Update state when user types
                 />
-                <button type="submit">Search</button>
+                <button type="submit" disabled={fetching}>
+                    {fetching ? 'Searching...' : 'Search'}
+                </button>
             </form>
 
+            {error && <p>{error}</p>}
+
             <div>
-                <h3>Places in {city}</h3>
-                {error && <p>{error}</p>}  {/* Show error message if any */}
+                <h3>Places in {location}</h3>
                 <ul>
-                    {places.length === 0 && !error ? (
-                        <li>No places found for this city.</li>
+                    {places.length === 0 ? (
+                        <li>No places found for this location.</li>
                     ) : (
-                        places.map((place, index) => (
-                            <li key={index}>
+                        places.map((place) => (
+                            <li key={place.id}>
                                 <h4>{place.name}</h4>
                                 <p>{place.description}</p>
                                 {place.image && <img src={place.image} alt={place.name} />}
-                                <a href={place.link}>Visit</a>
+                                <a href={place.link} target="_blank" rel="noopener noreferrer">Visit</a>
                             </li>
                         ))
                     )}
