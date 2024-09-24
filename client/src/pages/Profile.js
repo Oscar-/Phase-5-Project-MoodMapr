@@ -7,6 +7,7 @@ function Profile() {
     password: '',
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [userLoading, setUserLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -21,6 +22,7 @@ function Profile() {
     e.preventDefault();
     setUserLoading(true);
     setError('');
+    setSuccess('');
 
     fetch('http://localhost:5555/register', {
       method: 'POST',
@@ -42,16 +44,17 @@ function Profile() {
         if (data.error) {
           throw new Error(data.error);
         }
-        // Handle success (e.g., redirect or show a success message)
+        // Show success message on successful user registration
+        setSuccess('User created successfully!');
         setNewUser({
           username: '',
           email: '',
           password: '',
         });
-        setError('');
       })
       .catch(error => {
-        setError(`Error adding user: ${error.message}`);
+        // Handle and display errors
+        setError(`Error adding user: ${error.message || 'Unknown error'}`);
         console.error('Submit error:', error);
       })
       .finally(() => {
@@ -102,7 +105,8 @@ function Profile() {
         <button type="submit" disabled={userLoading}>
           {userLoading ? 'Adding...' : 'Add User'}
         </button>
-        {error && <p>{error}</p>}
+        {success && <p style={{ color: 'green' }}>{success}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </div>
   );

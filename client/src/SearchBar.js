@@ -32,7 +32,7 @@ function SearchBar() {
 
     return (
         <div>
-            <form onSubmit={handleSearch}>
+            <form onSubmit={handleSearch} className="search-bar">
                 <input
                     type="text"
                     placeholder="Search by city"
@@ -44,9 +44,9 @@ function SearchBar() {
                 </button>
             </form>
 
-            {error && <p>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
 
-            <div>
+            <div className="search-results">
                 <h3>Places in {location}</h3>
                 <ul>
                     {places.length === 0 ? (

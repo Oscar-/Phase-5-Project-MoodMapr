@@ -1,46 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for routing
+import { Link } from 'react-router-dom'; 
 import SearchBar from '../SearchBar';
 import MoodContainer from '../components/Mood/MoodContainer'; 
-import PlaceCard from '../components/Place/PlaceCard'; // Import PlaceCard
+import PlaceCard from '../components/Place/PlaceCard'; 
 
 function Home() {
   const [moods, setMoods] = useState([]);
-  const [allPlaces, setAllPlaces] = useState([]); // State for all places
-  const [filteredPlaces, setFilteredPlaces] = useState([]); // State for places filtered by mood
+  const [allPlaces, setAllPlaces] = useState([]);
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [selectedMood, setSelectedMood] = useState(null);
   const [error, setError] = useState('');
   const [fetching, setFetching] = useState(false);
 
-  // Fetch moods from the server
   useEffect(() => {
     fetch('http://localhost:5555/moods')
       .then(response => response.json())
       .then(data => setMoods(data))
       .catch(error => {
-        setError('Error fetching moods');
+        setError(`Error fetching moods: ${error.message}`);
         console.error('Fetch error:', error);
       });
   }, []);
 
-  // Fetch all places
   useEffect(() => {
-    fetch('http://localhost:5555/places') // Endpoint for all places
+    fetch('http://localhost:5555/places')
       .then(response => response.json())
       .then(data => {
         setAllPlaces(data);
-        setFilteredPlaces(data); // Initially, show all places
+        setFilteredPlaces(data);
       })
       .catch(error => {
-        setError('Error fetching places');
+        setError(`Error fetching places: ${error.message}`);
         console.error('Fetch error:', error);
       });
   }, []);
 
-  // Fetch places based on the selected mood
   useEffect(() => {
     if (!selectedMood) {
-      setFilteredPlaces(allPlaces); // Show all places if no mood is selected
+      setFilteredPlaces(allPlaces);
       return;
     }
 
@@ -48,31 +45,51 @@ function Home() {
     fetch(`http://localhost:5555/places/by_mood?mood=${encodeURIComponent(selectedMood)}`)
       .then(response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error(`Network response was not ok: ${response.statusText}`);
         }
         return response.json();
       })
-      .then(data => {
-        console.log('Filtered places:', data); // Debug data
-        setFilteredPlaces(data);
-      })
+      .then(data => setFilteredPlaces(data))
       .catch(error => {
-        setError('Error fetching places');
+        setError(`Error fetching places: ${error.message}`);
         console.error('Fetch error:', error);
       })
-      .finally(() => {
-        setFetching(false);
-      });
+      .finally(() => setFetching(false));
   }, [selectedMood, allPlaces]);
 
   const handleMoodSelect = (mood) => {
     setSelectedMood(mood);
   };
 
+  const handleSave = (placeId) => {
+    fetch('http://localhost:5555/favorites/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ place_id: placeId }), 
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        console.log(`Place ${placeId} saved to favorites`);
+        alert("Place saved to favorites!");
+      })
+      .catch(error => {
+        setError(`Error saving place: ${error.message}`);
+        console.error('Fetch error:', error);
+      });
+  };
+  
+
   return (
     <div className="container">
       <header>
-        <h1>Explore Places</h1>
+        <h1>Mood Mapr</h1>
       </header>
       
       <section>
@@ -93,8 +110,8 @@ function Home() {
             ) : (
               filteredPlaces.map(place => (
                 <li key={place.id}>
-                  <PlaceCard place={place} /> {/* Use PlaceCard component */}
-                  <Link to={`/places/${place.id}`}>View Details</Link> {/* Link to detailed view */}
+                  <PlaceCard place={place} onSave={handleSave} />
+                  <Link to={`/places/${place.id}`} >View Details</Link>
                 </li>
               ))
             )}
@@ -103,6 +120,10 @@ function Home() {
       )}
       
       {error && <p className="error">{error}</p>}
+      
+      <footer>
+        <Link to="/favorites">View My Favorites</Link>
+      </footer>
     </div>
   );
 }

@@ -127,6 +127,37 @@ section {
   text-decoration: underline;
 }
 
+/* Mood Buttons */
+.mood-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 0;
+}
+
+.mood-item {
+  list-style-type: none;
+}
+
+.mood-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 1rem;
+  color: var(--primary);
+}
+
+.mood-button:hover {
+  background-color: var(--button-hover);
+  color: #fff;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
 /* Responsive styling for mobile */
 @media (max-width: 768px) {
   .cards {
@@ -142,4 +173,302 @@ section {
   .card .image img {
     height: 250px; /* Adjust image height for mobile */
   }
+
+  .mood-list {
+    flex-direction: column; /* Stack buttons vertically on small screens */
+  }
+}
+
+/* Search Bar Styling */
+/* Search Bar Styling */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 2px solid var(--primary);
+  border-radius: 8px 0 0 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-bar input:focus {
+  border-color: var(--accent);
+}
+
+.search-bar button {
+  padding: 12px 20px;
+  background-color: var(--accent);
+  color: white;
+  border: 2px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: var(--button-hover);
+  border-color: var(--button-hover);
+}
+
+.search-bar button:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Search Results Styling */
+.search-results {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Result List Styling */
+.search-results ul {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Individual Card Styling */
+.search-results li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-results li:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Styling */
+.search-results img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+/* Link Styling */
+.search-results a {
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.search-results a:hover {
+  color: var(--button-hover);
+}
+
+/* Place Name Styling */
+.search-results li h2 {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* Description Styling */
+.search-results li p {
+  font-size: 1rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Navigation Bar Styling */
+nav {
+  background-color: #1a1a1a; /* Dark background */
+  padding: 20px 0;
+}
+
+nav ul {
+  list-style-type: none; /* Remove bullet points */
+  display: flex;
+  justify-content: center; /* Center the items */
+  gap: 30px; /* Add space between links */
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  display: inline; /* Keep links inline */
+}
+
+nav a {
+  text-decoration: none; /* Remove default underline */
+  font-size: 18px; /* Slightly larger font */
+  color: #fff; /* White text color */
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s ease; /* Smooth transition */
+}
+
+nav a:hover {
+  background-color: #3498db; /* Highlight link with blue color on hover */
+  color: #fff; /* Keep text white */
+}
+
+nav a.active {
+  background-color: #2980b9; /* Darker blue for the active link */
+}
+
+nav a:focus {
+  outline: none;
+  box-shadow: 0 0 5px #3498db; /* Add subtle shadow when focused */
+}
+
+/* Detail Page Container */
+.detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--background);
+  min-height: 100vh;
+}
+
+/* Detail Card Styling */
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  width: 100%;
+  margin: 20px 0;
+  text-align: center;
+}
+
+/* Image Styling for Detail Page */
+.detail-card .image img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 15px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+/* Detail Text Styling */
+.detail-card .details h2 {
+  margin: 10px 0;
+  font-size: 1.75rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.detail-card .details p {
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* Link Styling */
+.detail-link {
+  padding: 10px 20px;
+  background-color: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.detail-link:hover {
+  background-color: var(--button-hover);
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: var(--accent);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  text-align: center;
+  margin-top: 10px;
 }

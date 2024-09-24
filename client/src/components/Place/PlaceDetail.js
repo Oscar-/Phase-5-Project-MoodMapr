@@ -1,4 +1,3 @@
-// src/pages/PlaceDetail.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -23,14 +22,18 @@ function PlaceDetail() {
   }, [id]);
 
   return (
-    <div>
-      {error && <p>{error}</p>}
+    <div className="detail-container">
+      {error && <p className="error-message">{error}</p>}
       {place ? (
-        <div>
-          <h2>{place.name}</h2>
-          <p>{place.description}</p>
-          {place.image && <img src={place.image} alt={place.name} />}
-          <a href={place.link} target="_blank" rel="noopener noreferrer">Visit</a>
+        <div className="detail-card">
+          <div className="image">
+            {place.image && <img src={place.image} alt={place.name} />}
+          </div>
+          <div className="details">
+            <h2>{place.name}</h2>
+            <p>{place.description}</p>
+            <a href={place.link} className="detail-link" target="_blank" rel="noopener noreferrer">Visit</a>
+          </div>
         </div>
       ) : (
         <p>Loading place details...</p>

@@ -1,7 +1,6 @@
 import React from 'react';
 
-
-function PlaceCard({ place }) {
+function PlaceCard({ place, onSave, onDelete }) {
   return (
     <div className="card">
       <div className="image">
@@ -10,6 +9,8 @@ function PlaceCard({ place }) {
       <div className="details">
         <h2>{place.name}</h2>
         <p>{place.description}</p>
+        <button onClick={() => onSave(place.id)}>Save</button>
+        <button onClick={() => onDelete(place.id)}>Remove </button> 
       </div>
     </div>
   );
