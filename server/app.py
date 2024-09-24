@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from extensions import db
 from flask_restful import Api, Resource
 from flask_cors import CORS
@@ -9,6 +9,7 @@ from flask_migrate import Migrate
 import os 
 from dotenv import load_dotenv
 import openai
+import re
 
 
 load_dotenv()
@@ -51,7 +52,7 @@ class GenerateText(Resource):
 class UserList(Resource):
     def get(self):
         users = User.query.all()
-        return jsonify([{
+        return make_response([{
             'id': user.id,
             'username': user.username,
             'email': user.email,
@@ -60,7 +61,7 @@ class UserList(Resource):
 class SingleUser(Resource):
     def get(self, user_id):
         user = User.query.get_or_404(user_id)
-        return jsonify({
+        return make_response({
             'id': user.id,
             'username': user.username,
             'email': user.email,
@@ -79,7 +80,7 @@ class SingleUser(Resource):
 
         db.session.commit()
 
-        return jsonify({
+        return make_response({
             'message': 'User updated successfully',
             'user': {
                 'id': user.id,
@@ -93,20 +94,27 @@ class SingleUser(Resource):
         db.session.delete(user)
         db.session.commit()
 
-        return jsonify({'message': 'User deleted successfully'})
+        return make_response({'message': 'User deleted successfully'})
 
 class RegisterUser(Resource):
     def post(self):
         data = request.get_json()
 
         if not data.get('username') or not data.get('email') or not data.get('password'):
-            return jsonify({'error': 'Missing required fields'}), 400
+            return make_response({'error': 'Missing required fields'}, 400)
+
+        email_regex = r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        if not re.match(email_regex, data['email']):
+            return make_response({'error': 'Invalid email address'}, 400)
 
         if User.query.filter_by(email=data['email']).first():
-            return jsonify({'error': 'Email address already in use'}), 400
+            return make_response({'error': 'Email address already in use'}, 400)
 
         if User.query.filter_by(username=data['username']).first():
-            return jsonify({'error': 'Username already in use'}), 400
+            return make_response({'error': 'Username already in use'}, 400)
+
+        if len(data['password']) < 8:
+            return make_response({'error': 'Password must be at least 8 characters long'}, 400)
 
         hashed_password = generate_password_hash(data['password'])
 
@@ -119,21 +127,21 @@ class RegisterUser(Resource):
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify({
+        return make_response({
             'message': 'User created successfully',
             'user': {
                 'id': new_user.id,
                 'username': new_user.username,
                 'email': new_user.email,
             }
-        }), 201
+        }, 201)
 
 # ------------------- Mood API -------------------
 
 class MoodList(Resource):
     def get(self):
         moods = Mood.query.all()
-        return jsonify([{
+        return make_response([{
             'id': mood.id,
             'feeling_name': mood.feeling_name,
             'description': mood.description,
@@ -143,7 +151,7 @@ class MoodList(Resource):
 class SingleMood(Resource):
     def get(self, mood_id):
         mood = Mood.query.get_or_404(mood_id)
-        return jsonify({
+        return make_response({
             'id': mood.id,
             'feeling_name': mood.feeling_name,
             'description': mood.description,
@@ -163,7 +171,7 @@ class SingleMood(Resource):
 
         db.session.commit()
 
-        return jsonify({
+        return make_response({
             'message': 'Mood updated successfully',
             'mood': {
                 'id': mood.id,
@@ -178,14 +186,14 @@ class SingleMood(Resource):
         db.session.delete(mood)
         db.session.commit()
 
-        return jsonify({'message': 'Mood deleted successfully'})  
+        return make_response({'message': 'Mood deleted successfully'})  
 
 # ------------------- Place API -------------------
 
 class PlaceList(Resource):
     def get(self):
         places = Place.query.all()
-        return jsonify([{
+        return make_response([{
             'id': place.id,
             'name': place.name,
             'description': place.description,
@@ -208,7 +216,7 @@ class PlaceList(Resource):
         db.session.add(new_place)
         db.session.commit()
 
-        return jsonify({
+        return make_response({
             'message': 'Place created successfully',
             'place': {
                 'id': new_place.id,
@@ -223,7 +231,7 @@ class PlaceList(Resource):
 class SinglePlace(Resource):
     def get(self, place_id):
         place = Place.query.get_or_404(place_id)
-        return jsonify({
+        return make_response({
             'id': place.id,
             'name': place.name,
             'description': place.description,
@@ -249,7 +257,7 @@ class SinglePlace(Resource):
 
         db.session.commit()
 
-        return jsonify({
+        return make_response({
             'message': 'Place updated successfully',
             'place': {
                 'id': place.id,
@@ -266,7 +274,7 @@ class SinglePlace(Resource):
         db.session.delete(place)
         db.session.commit()
 
-        return jsonify({'message': 'Place deleted successfully'})
+        return make_response({'message': 'Place deleted successfully'})
     
 class PlacesByLocation(Resource):
     def get(self):
@@ -287,7 +295,7 @@ class PlacesByLocation(Resource):
         if not places:
             return {'message': 'No places found for this location'}, 404
 
-        return jsonify([{
+        return make_response([{
             'id': place.id,
             'name': place.name,
             'description': place.description,
@@ -312,7 +320,7 @@ class PlacesByMood(Resource):
         if not places:
             return {'message': 'No places found for this mood'}, 404
 
-        return jsonify([{
+        return make_response([{
             'id': place.id,
             'name': place.name,
             'description': place.description,
@@ -325,7 +333,7 @@ class PlacesByMood(Resource):
 class LocationList(Resource):
     def get(self):
         locations = Location.query.all()
-        return jsonify([{
+        return make_response([{
             'id': location.id,
             'name': location.name,
             'city': location.city,
@@ -348,7 +356,7 @@ class LocationList(Resource):
         db.session.add(new_location)
         db.session.commit()
 
-        return jsonify({
+        return make_response({
             'message': 'Location created successfully',
             'location': {
                 'id': new_location.id,
@@ -363,7 +371,7 @@ class LocationList(Resource):
 class SingleLocation(Resource):
     def get(self, location_id):
         location = Location.query.get_or_404(location_id)
-        return jsonify({
+        return make_response({
             'id': location.id,
             'name': location.name,
             'city': location.city,
@@ -389,7 +397,7 @@ class SingleLocation(Resource):
 
         db.session.commit()
 
-        return jsonify({
+        return make_response({
             'message': 'Location updated successfully',
             'location': {
                 'id': location.id,
@@ -406,45 +414,60 @@ class SingleLocation(Resource):
         db.session.delete(location)
         db.session.commit()
 
-        return jsonify({'message': 'Location deleted successfully'})
+        return make_response({'message': 'Location deleted successfully'})
 
 # ------------------- Favorite API -------------------
 
-class FavoriteList(Resource):
-    def get(self):
-        favorites = Favorite.query.all()
-        return jsonify([{
-            'id': favorite.id,
-            'user_id': favorite.user_id,
-            'place_id': favorite.place_id,
-            'created_at': favorite.created_at.isoformat(),
-        } for favorite in favorites])
+# class FavoriteList(Resource):
+#     def get(self):
+#         # If you want to fetch all global favorites as well as user-specific ones, just query them all
+#         favorites = Favorite.query.all()
+        
+#         return make_response([{
+#             'id': favorite.id,
+#             'user_id': favorite.user_id,
+#             'place_id': favorite.place_id,
+#             'created_at': favorite.created_at.isoformat(),
+#         } for favorite in favorites])
 
-    def post(self):
-        data = request.get_json()
+#     def post(self):
+#         data = request.get_json()
 
-        new_favorite = Favorite(
-            user_id=data['user_id'],
-            place_id=data['place_id']
-        )
+#         # If user_id is provided, use it, otherwise save as a global favorite
+#         user_id = data.get('user_id', None)  # Global if user_id is None
+#         place_id = data['place_id']
 
-        db.session.add(new_favorite)
-        db.session.commit()
+#         # Check if the favorite already exists for the user or globally
+#         existing_favorite = Favorite.query.filter_by(user_id=user_id, place_id=place_id).first()
+#         if existing_favorite:
+#             return make_response({
+#                 'message': 'Place is already in favorites for this user or globally'
+#             }, 400)
 
-        return jsonify({
-            'message': 'Favorite added successfully',
-            'favorite': {
-                'id': new_favorite.id,
-                'user_id': new_favorite.user_id,
-                'place_id': new_favorite.place_id,
-                'created_at': new_favorite.created_at.isoformat(),
-            }
-        }), 201
+#         # Add the new favorite (user-specific or global)
+#         new_favorite = Favorite(
+#             user_id=user_id,  # This will be None for global favorites
+#             place_id=place_id
+#         )
+
+#         db.session.add(new_favorite)
+#         db.session.commit()
+
+#         return make_response({
+#             'message': 'Favorite added successfully',
+#             'favorite': {
+#                 'id': new_favorite.id,
+#                 'user_id': new_favorite.user_id,
+#                 'place_id': new_favorite.place_id,
+#                 'created_at': new_favorite.created_at.isoformat(),
+#             }
+#         }, 201)
+
 
 class SingleFavorite(Resource):
     def get(self, favorite_id):
         favorite = Favorite.query.get_or_404(favorite_id)
-        return jsonify({
+        return make_response({
             'id': favorite.id,
             'user_id': favorite.user_id,
             'place_id': favorite.place_id,
@@ -456,7 +479,117 @@ class SingleFavorite(Resource):
         db.session.delete(favorite)
         db.session.commit()
 
-        return jsonify({'message': 'Favorite deleted successfully'})
+        return make_response({'message': 'Favorite deleted successfully'})
+
+    
+class AddToFavorites(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+
+            place_id = data.get('place_id')
+
+            if not place_id:
+                return make_response({'error': 'Missing user_id or place_id'}, 400)
+
+            # Check if the user and place exist
+            place = Place.query.get(place_id)
+            if not place:
+                return make_response({'error': 'User or place not found'}, 404)
+
+            # Check if the place is already in the favorites
+            existing_favorite = Favorite.query.filter_by( place_id=place_id).first()
+            if existing_favorite:
+                return make_response({'message': 'Place already in favorites'}, 200)
+
+            # Add the place to favorites
+            new_favorite = Favorite(place_id=place_id)
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            return make_response({'message': 'Place added to favorites'}, 201)
+
+        except Exception as e:
+            db.session.rollback()  # Rollback in case of error
+            # Log the exception for debugging
+            print(f"Exception occurred: {e}")
+            return make_response({'error': 'Failed to add place to favorites'}, 500)
+
+class UserFavorites(Resource):
+    def get(self, user_id):
+        favorites = Favorite.query.filter_by(user_id=user_id).all()
+        favorite_places = [{
+            'id': favorite.place.id,
+            'name': favorite.place.name,
+            'description': favorite.place.description,
+            'image': favorite.place.image
+        } for favorite in favorites]
+        return make_response(favorite_places)
+    
+class GetFavorites(Resource):
+    def get(self):
+        favorites = Favorite.query.all()
+        favorite_places = [favorite.place for favorite in favorites]  
+        
+        if not favorite_places:
+            return make_response({"message": "No favorite places found"}, 404)
+        
+        # Assuming the Place model has a serialize method
+        return make_response([place.serialize() for place in favorite_places], 200)
+
+class RemoveFromFavorites(Resource):
+    def delete(self):
+        data = request.get_json()
+        place_id = data.get('place_id')
+
+        if not place_id:
+            return make_response({'error': 'Missing place_id'}, 400)
+
+        # Find the favorite entry
+        favorite = Favorite.query.filter_by(place_id=place_id).first()
+        if not favorite:
+            return make_response({'error': 'Place not in favorites'}, 404)
+
+        # Remove the entry
+        db.session.delete(favorite)
+        db.session.commit()
+
+        return make_response({'message': 'Place removed from favorites'}, 200)
+
+    
+class AddGlobalFavorite(Resource):
+    def post(self):
+        data = request.get_json()
+        place_id = data.get('place_id')
+        
+        if not place_id:
+            return make_response({"error": "Place ID is required"}, 400)
+        
+        # Check if the favorite already exists globally (with user_id=None)
+        existing_favorite = Favorite.query.filter_by(place_id=place_id, user_id=None).first()
+        if existing_favorite:
+            return make_response({"message": "Place is already in global favorites"}, 400)
+        
+        # Create a new favorite with user_id=None (global favorite)
+        favorite = Favorite(place_id=place_id, user_id=None, created_at=datetime.utcnow())
+        db.session.add(favorite)
+        db.session.commit()
+        
+        return make_response({"message": "Place added to global favorites"}, 201)
+
+# Route to get all global favorites (those without a user_id)
+class GetGlobalFavorites(Resource):
+    def get(self):
+        global_favorites = Favorite.query.filter_by(user_id=None).all()
+        
+        if not global_favorites:
+            return make_response({"message": "No global favorite places found"}, 404)
+        
+        # Serialize the associated places for the global favorites
+        favorite_places = [favorite.place.serialize() for favorite in global_favorites]
+        return make_response(favorite_places, 200)
+
+
 
 # Add API resources to the API
 api.add_resource(GenerateText, '/generate-text')
@@ -478,8 +611,17 @@ api.add_resource(SingleLocation, '/locations/<int:location_id>')
 api.add_resource(PlacesByLocation, '/places/by_location')
 api.add_resource(PlacesByMood, '/places/by_mood')
 
-api.add_resource(FavoriteList, '/favorites')
+# api.add_resource(FavoriteList, '/favorites')
 api.add_resource(SingleFavorite, '/favorites/<int:favorite_id>')
+api.add_resource(GetFavorites, '/favorites')
+
+api.add_resource(AddToFavorites, '/favorites/add')
+# api.add_resource(GetFavorites, '/favorites/<int:user_id>')
+api.add_resource(RemoveFromFavorites, '/favorites/remove')
+api.add_resource(UserFavorites, '/favorites/<int:user_id>')
+
+api.add_resource(AddGlobalFavorite, '/global_favorites/add')
+api.add_resource(GetGlobalFavorites, '/global_favorites')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

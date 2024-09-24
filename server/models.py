@@ -48,16 +48,17 @@ class Favorite(db.Model):
     __tablename__ = 'favorites'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  # Keep as nullable
     place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationships
-    user = db.relationship('User', back_populates='favorites')
-    place = relationship('Place', back_populates='favorites')
+    user = db.relationship('User', back_populates='favorites', lazy='joined')
+    place = db.relationship('Place', back_populates='favorites', lazy='joined')
 
     def __repr__(self):
         return f'<Favorite User: {self.user_id}, Place: {self.place_id}>'
+
 
 
 # Mood model
@@ -97,6 +98,14 @@ class Place(db.Model):
     # Many-to-many relationship with Mood
     moods = relationship('Mood', secondary=mood_place_association, back_populates='places')
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'image': self.image,
+            'link': self.link
+        }
 
     def __repr__(self):
         return f'<Place {self.name}>'
