@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Profile() {
   const [newUser, setNewUser] = useState({
@@ -9,6 +9,7 @@ function Profile() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [userLoading, setUserLoading] = useState(false);
+  const [userId, setUserId] = useState(1); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +45,6 @@ function Profile() {
         if (data.error) {
           throw new Error(data.error);
         }
-        // Show success message on successful user registration
         setSuccess('User created successfully!');
         setNewUser({
           username: '',
@@ -53,14 +53,33 @@ function Profile() {
         });
       })
       .catch(error => {
-        // Handle and display errors
         setError(`Error adding user: ${error.message || 'Unknown error'}`);
-        console.error('Submit error:', error);
       })
       .finally(() => {
         setUserLoading(false);
       });
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:5555/users/${userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user');
+        }
+        const data = await response.json();
+        setNewUser({
+          username: data.username,
+          email: data.email,
+          password: '', 
+        });
+      } catch (error) {
+        setError(`Error fetching user: ${error.message}`);
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
 
   return (
     <div>

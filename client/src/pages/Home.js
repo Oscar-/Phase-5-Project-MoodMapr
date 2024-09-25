@@ -121,9 +121,7 @@ function Home() {
       
       {error && <p className="error">{error}</p>}
       
-      <footer>
-        <Link to="/favorites">View My Favorites</Link>
-      </footer>
+      
     </div>
   );
 }

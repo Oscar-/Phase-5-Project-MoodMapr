@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
 function SearchBar() {
-    const [location, setLocation] = useState('');  // Holds the location input from the user
-    const [places, setPlaces] = useState([]);  // Holds filtered places based on location
-    const [error, setError] = useState('');  // Holds error messages
-    const [fetching, setFetching] = useState(false);  // Loading state
-
+    const [location, setLocation] = useState('');  
+    const [places, setPlaces] = useState([]);  
+    const [error, setError] = useState('');  
+    const [fetching, setFetching] = useState(false);  
     const handleSearch = (e) => {
         e.preventDefault();
         setFetching(true);
@@ -36,8 +35,8 @@ function SearchBar() {
                 <input
                     type="text"
                     placeholder="Search by city"
-                    value={location}  // Bind the input value to the location state
-                    onChange={(e) => setLocation(e.target.value)}  // Update state when user types
+                    value={location}  
+                    onChange={(e) => setLocation(e.target.value)} 
                 />
                 <button type="submit" disabled={fetching}>
                     {fetching ? 'Searching...' : 'Search'}

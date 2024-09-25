@@ -30,16 +30,15 @@ function FavoriteContainer() {
       if (!response.ok) {
         throw new Error('Failed to delete favorite');
       }
-      // Re-fetch favorites to ensure the UI is up to date
+     
       return fetch('http://localhost:5555/favorites');
     })
     .then(response => response.json())
     .then(data => {
       if (data.length === 0) {
-        // Handle the case when there are no favorites
-        setFavorites([]); // Set favorites to an empty array
+        setFavorites([]); 
       } else {
-        setFavorites(data); // Update state with the fresh list
+        setFavorites(data); 
       }
     })
     .catch(error => {
@@ -50,7 +49,7 @@ function FavoriteContainer() {
   
 
   const handleSave = (placeId) => {
-    // Your save logic here
+    
     console.log(`Saved place with ID: ${placeId}`);
   };
 

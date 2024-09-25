@@ -5,6 +5,7 @@ function PlaceDetail() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');  // To display success/error messages for reservation
 
   useEffect(() => {
     fetch(`http://localhost:5555/places/${id}`)
@@ -21,9 +22,36 @@ function PlaceDetail() {
       });
   }, [id]);
 
+  // Function to handle reservation
+  const handleReservation = () => {
+    fetch('http://localhost:5555/reservations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        place_id: id,  // Use the current place's ID
+        // Add other reservation details if needed, such as user_id if needed
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        setMessage(data.error);  // Display error message
+      } else {
+        setMessage('Place reserved successfully!');  // Display success message
+      }
+    })
+    .catch(error => {
+      console.error('Reservation error:', error);
+      setMessage('Error making reservation');
+    });
+  };
+
   return (
     <div className="detail-container">
       {error && <p className="error-message">{error}</p>}
+      {message && <p className="message">{message}</p>}
       {place ? (
         <div className="detail-card">
           <div className="image">
@@ -33,6 +61,7 @@ function PlaceDetail() {
             <h2>{place.name}</h2>
             <p>{place.description}</p>
             <a href={place.link} className="detail-link" target="_blank" rel="noopener noreferrer">Visit</a>
+            <button onClick={handleReservation} className="reserve-button">Reserve</button>  {/* Reserve button */}
           </div>
         </div>
       ) : (

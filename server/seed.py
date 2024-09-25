@@ -10,11 +10,12 @@ def seed_database():
         db.create_all()
 
         # Create Locations
-        location1 = Location(city_name='New York', coordinates='40.7128° N, 74.0060° W')
-        location2 = Location(city_name='San Francisco', coordinates='37.7749° N, 122.4194° W')
-        location3 = Location(city_name='Chicago', coordinates='41.8781° N, 87.6298° W')
-        location4 = Location(city_name='Los Angeles', coordinates='34.0522° N, 118.2437° W')
-        location5 = Location(city_name='Miami', coordinates='25.7617° N, 80.1918° W')
+        location1 = Location(city_name='New York', coordinates='40.7128, -74.0060')
+        location2 = Location(city_name='San Francisco', coordinates='37.7749, -122.4194')
+        location3 = Location(city_name='Chicago', coordinates='41.8781, -87.6298')
+        location4 = Location(city_name='Los Angeles', coordinates='34.0522, -118.2437')
+        location5 = Location(city_name='Miami', coordinates='25.7617, -80.1918')
+
 
         db.session.add_all([location1, location2, location3, location4, location5])
         db.session.commit()

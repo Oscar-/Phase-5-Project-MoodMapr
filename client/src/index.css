@@ -22,6 +22,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+
+
 /* Centered Container */
 .container {
   display: flex;
@@ -453,7 +455,7 @@ button {
   color: white;
   background-color: var(--accent);
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -471,4 +473,170 @@ button:disabled {
   color: green;
   text-align: center;
   margin-top: 10px;
+}
+
+/* Trip List */
+.trip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-height: 400px; /* Set a max height to enable scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Custom scrollbar styles for WebKit browsers */
+.trip-list::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+.trip-list::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.trip-list::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.trip-list::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color when hovering over the scrollbar thumb */
+}
+
+/* Custom scrollbar styles for Firefox */
+.trip-list {
+  scrollbar-width: thin; /* Make the scrollbar thinner */
+  scrollbar-color: #888 #f1f1f1; /* Thumb color and track color */
+}
+
+.trip-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  width: 100%;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.trip-card:hover {
+  transform: scale(1.02);
+}
+
+.trip-card img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 15px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.trip-card h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+/* Styling for visit link */
+.visit-link {
+  color: var(--accent);
+  font-weight: bold;
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.visit-link:hover {
+  background-color: var(--accent);
+  color: #fff;
+  border-color: var(--accent-dark);
+}
+
+/* Styling for delete button */
+.delete-button {
+  background-color: #ff4b4b;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #e60000;
+  transform: scale(1.05);
+}
+
+.delete-button:active {
+  background-color: #cc0000;
+  transform: scale(1);
+}
+
+
+/* AI Form */
+.ai-form {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Smaller Input Box for Prompt */
+.ai-input {
+  padding: 8px; /* Reduced padding for a more compact input */
+  border: 1px solid var(--primary);
+  border-radius: 8px; /* Slightly rounded corners */
+  width: 100%; /* Responsive width */
+  max-width: 400px; /* Reduced maximum width */
+  font-size: 0.9rem; /* Smaller font size for compactness */
+  transition: border-color 0.3s;
+}
+
+.ai-input:focus {
+  border-color: var(--accent); /* Change border color on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Smaller Generate Button */
+.ai-button {
+  padding: 6px; /* Adjusted padding for a smaller button */
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px; /* Rounded corners for modern feel */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
+  font-size: 0.85rem; /* Smaller font size for the button */
+}
+
+.ai-button:hover {
+  background-color: var(--accent);
+  transform: scale(1.05); 
+}
+
+.ai-response {
+  margin-top: 20px;
+  background-color: var(--background);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+.App {
+  height: 100%;
 }

@@ -9,8 +9,8 @@ function PlaceCard({ place, onSave, onDelete }) {
       <div className="details">
         <h2>{place.name}</h2>
         <p>{place.description}</p>
-        <button onClick={() => onSave(place.id)}>Save</button>
-        <button onClick={() => onDelete(place.id)}>Remove </button> 
+        <button className="save-button" onClick={() => onSave(place.id)}>Save</button>
+        <button className="remove-button" onClick={() => onDelete(place.id)}>Remove </button> 
       </div>
     </div>
   );

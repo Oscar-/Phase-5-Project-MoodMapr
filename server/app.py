@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify, make_response
 from extensions import db
 from flask_restful import Api, Resource
 from flask_cors import CORS
-from werkzeug.security import generate_password_hash
-from models import User, Favorite, Mood, Place, Location
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import User, Favorite, Mood, Place, Location, Trip
 from datetime import datetime
 from flask_migrate import Migrate
 import os 
@@ -135,6 +135,27 @@ class RegisterUser(Resource):
                 'email': new_user.email,
             }
         }, 201)
+    
+class LoginUser(Resource):
+    def post(self):
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user._password_hash, password):
+            # Here you can create a session, token, or similar
+            return make_response({
+                'message': 'Login successful',
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                }
+            })
+        else:
+            return make_response({'error': 'Invalid email or password'}, 401)
+
 
 # ------------------- Mood API -------------------
 
@@ -416,6 +437,27 @@ class SingleLocation(Resource):
 
         return make_response({'message': 'Location deleted successfully'})
 
+
+class LocationResource(Resource):
+    def get(self):
+        locations = Location.query.all()
+        location_list = []
+
+        for location in locations:
+            if location.coordinates:  # Ensure coordinates exist
+                # Clean the coordinate string (remove the degree symbol and direction)
+                cleaned_coords = re.sub(r'[° NSEW]', '', location.coordinates).strip()
+                lat, lng = map(float, cleaned_coords.split(','))  # Parse latitude and longitude
+
+                location_list.append({
+                    'id': location.id,
+                    'city_name': location.city_name,
+                    'lat': lat,
+                    'lng': lng,
+                })
+
+        return location_list  # Return the list of locations as JSON
+
 # ------------------- Favorite API -------------------
 
 # class FavoriteList(Resource):
@@ -510,8 +552,7 @@ class AddToFavorites(Resource):
             return make_response({'message': 'Place added to favorites'}, 201)
 
         except Exception as e:
-            db.session.rollback()  # Rollback in case of error
-            # Log the exception for debugging
+            db.session.rollback()  
             print(f"Exception occurred: {e}")
             return make_response({'error': 'Failed to add place to favorites'}, 500)
 
@@ -589,6 +630,68 @@ class GetGlobalFavorites(Resource):
         favorite_places = [favorite.place.serialize() for favorite in global_favorites]
         return make_response(favorite_places, 200)
 
+# ------------------- Trip API -------------------    
+    
+class AddReservation(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+
+            place_id = data.get('place_id')
+
+            if not place_id:
+                return make_response({'error': 'Missing place_id'}, 400)
+
+            # Check if the place exists using db.session.get() (SQLAlchemy 2.0+ compatible)
+            place = db.session.get(Place, place_id)
+            if not place:
+                return make_response({'error': 'Place not found'}, 404)
+
+            # Add the place to the user's trips
+            new_trip = Trip(place_id=place_id)  # Assuming a Trip model
+            db.session.add(new_trip)
+            db.session.commit()
+
+            return make_response({'message': 'Place reserved successfully!'}, 201)
+        
+        except Exception as e:
+            return make_response({'error': str(e)}, 500)
+        
+class GetTrips(Resource):
+    def get(self):
+        try:
+            # Fetch all trips from the database
+            trips = Trip.query.all()
+
+            # Serialize trip data (ensure the Trip model has a serialize method)
+            trips_data = [trip.serialize() for trip in trips]
+
+            # Return a successful response with the serialized data
+            return make_response(jsonify(trips_data), 200)
+        except Exception as e:
+            # Handle exceptions and return an error response
+            return make_response({'error': str(e)}, 500)
+        
+class TripResource(Resource):
+    # Delete a trip by its ID
+    def delete(self, trip_id):
+        # Find the trip by its ID
+        trip = Trip.query.get(trip_id)
+        
+        # If trip doesn't exist, return a 404 error
+        if trip is None:
+            return make_response(jsonify({"error": "Trip not found"}), 404)
+        
+        # Delete the trip
+        db.session.delete(trip)
+        db.session.commit()
+        
+        # Return a success message
+        return make_response(jsonify({"message": f"Trip with id {trip_id} deleted successfully."}), 200)
+
+
+
+
 
 
 # Add API resources to the API
@@ -597,6 +700,8 @@ api.add_resource(GenerateText, '/generate-text')
 api.add_resource(UserList, '/users')
 api.add_resource(SingleUser, '/users/<int:user_id>')
 api.add_resource(RegisterUser, '/register')
+api.add_resource(LoginUser, '/login')
+
 
 api.add_resource(MoodList, '/moods')
 api.add_resource(SingleMood, '/moods/<int:mood_id>')
@@ -607,6 +712,7 @@ api.add_resource(SinglePlace, '/places/<int:place_id>')
 
 api.add_resource(LocationList, '/locations')
 api.add_resource(SingleLocation, '/locations/<int:location_id>')
+api.add_resource(LocationResource, '/api/locations')
 
 api.add_resource(PlacesByLocation, '/places/by_location')
 api.add_resource(PlacesByMood, '/places/by_mood')
@@ -622,6 +728,10 @@ api.add_resource(UserFavorites, '/favorites/<int:user_id>')
 
 api.add_resource(AddGlobalFavorite, '/global_favorites/add')
 api.add_resource(GetGlobalFavorites, '/global_favorites')
+
+api.add_resource(AddReservation, '/reservations')
+api.add_resource(GetTrips, '/trips')
+api.add_resource(TripResource, '/trips/<int:trip_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

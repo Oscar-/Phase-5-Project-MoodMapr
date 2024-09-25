@@ -90,10 +90,12 @@ class Place(db.Model):
     image = db.Column(db.String(255), nullable=True)
     link = db.Column(db.String(255), nullable=True)
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=False)
+    
 
     # Relationships
     location = relationship('Location', back_populates='places')
     favorites = relationship('Favorite', back_populates='place')
+    trips = db.relationship('Trip', back_populates='place')
 
     # Many-to-many relationship with Mood
     moods = relationship('Mood', secondary=mood_place_association, back_populates='places')
@@ -128,4 +130,27 @@ class Location(db.Model):
 
     
 # class Trip(db.Model):
-#     pass
+#     id = db.Column(db.Integer, primary_key=True)
+#     place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
+#     place = db.relationship('Place', back_populates='trips')
+
+class Trip(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
+    place = db.relationship('Place', back_populates='trips')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'place_id': self.place_id,
+            'place': {
+                'id': self.place.id,
+                'name': self.place.name,
+                'description': self.place.description,
+                'image': self.place.image,
+                'link': self.place.link,
+            },
+        }
+
+
+    

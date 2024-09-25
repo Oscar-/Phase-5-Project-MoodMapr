@@ -4,12 +4,12 @@ function MoodContainer({ moods, onMoodSelect }) {
   return (
     <div>
       <h2>Select a Mood</h2>
-      <ul className="mood-list"> {/* Add class to ul */}
+      <ul className="mood-list"> 
         {moods.map(mood => (
-          <li key={mood.id} className="mood-item"> {/* Add class to li */}
+          <li key={mood.id} className="mood-item"> 
             <button 
               onClick={() => onMoodSelect(mood.feeling_name)} 
-              className="mood-button" /* Add class to button */
+              className="mood-button" 
             >
               {mood.feeling_name}
             </button>
