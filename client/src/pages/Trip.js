@@ -11,9 +11,9 @@ function Trip() {
   const [aiResponse, setAiResponse] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
 
-  // Fetch trips from the backend
+  // Fetch trips 
   useEffect(() => {
-    fetch('http://localhost:5555/trips') // Ensure this route returns trips
+    fetch('http://localhost:5555/trips') 
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch trips');
@@ -21,13 +21,13 @@ function Trip() {
         return response.json();
       })
       .then(data => {
-        setTrips(data);  // Store fetched trips in state
+        setTrips(data); 
       })
       .catch(error => {
         setError('Error fetching trips: ' + error.message);
       })
       .finally(() => {
-        setLoading(false);  // Set loading to false after fetching
+        setLoading(false);  
       });
   }, []);
 
@@ -43,7 +43,7 @@ function Trip() {
         return response.json();
       })
       .then(() => {
-        // Update the trips state by filtering out the deleted trip
+        
         setTrips(trips.filter(trip => trip.id !== tripId));
       })
       .catch(error => {

@@ -5,7 +5,7 @@ function PlaceDetail() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');  // To display success/error messages for reservation
+  const [message, setMessage] = useState('');  
 
   useEffect(() => {
     fetch(`http://localhost:5555/places/${id}`)
@@ -31,15 +31,15 @@ function PlaceDetail() {
       },
       body: JSON.stringify({
         place_id: id,  // Use the current place's ID
-        // Add other reservation details if needed, such as user_id if needed
+        
       })
     })
     .then(response => response.json())
     .then(data => {
       if (data.error) {
-        setMessage(data.error);  // Display error message
+        setMessage(data.error); 
       } else {
-        setMessage('Place reserved successfully!');  // Display success message
+        setMessage('Place reserved successfully!');  
       }
     })
     .catch(error => {

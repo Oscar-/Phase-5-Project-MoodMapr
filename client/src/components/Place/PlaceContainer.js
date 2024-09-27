@@ -1,12 +1,12 @@
-// PlaceContainer.js
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-function PlaceContainer() {  // Rename the component to match the new filename
+function PlaceContainer() {  
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5555/places') // Update this URL based on your API setup
+    fetch('http://localhost:5555/places') 
       .then(response => response.json())
       .then(data => setPlaces(data));
   }, []);

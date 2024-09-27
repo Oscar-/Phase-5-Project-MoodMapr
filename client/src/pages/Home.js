@@ -84,7 +84,25 @@ function Home() {
         console.error('Fetch error:', error);
       });
   };
-  
+
+  const handleDelete = (placeId) => {
+    fetch(`http://localhost:5555/places/${placeId}`, {  
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        // Remove the deleted place from filteredPlaces
+        setFilteredPlaces(prevPlaces => prevPlaces.filter(place => place.id !== placeId));
+        console.log(`Place ${placeId} removed from favorites`);
+        alert("Place removed from favorites!");
+      })
+      .catch(error => {
+        setError(`Error removing place: ${error.message}`);
+        console.error('Fetch error:', error);
+      });
+  };
 
   return (
     <div className="container">
@@ -95,7 +113,6 @@ function Home() {
       <section>
         <h2>Search By City</h2>
         <SearchBar />
-        
         <MoodContainer moods={moods} onMoodSelect={handleMoodSelect} />
       </section>
       
@@ -110,8 +127,12 @@ function Home() {
             ) : (
               filteredPlaces.map(place => (
                 <li key={place.id}>
-                  <PlaceCard place={place} onSave={handleSave} />
-                  <Link to={`/places/${place.id}`} >View Details</Link>
+                  <PlaceCard 
+                    place={place} 
+                    onSave={handleSave} 
+                    onDelete={handleDelete} 
+                  />
+                  <Link to={`/places/${place.id}`}>View Details</Link>
                 </li>
               ))
             )}
@@ -120,8 +141,6 @@ function Home() {
       )}
       
       {error && <p className="error">{error}</p>}
-      
-      
     </div>
   );
 }

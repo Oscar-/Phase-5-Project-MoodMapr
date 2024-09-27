@@ -221,17 +221,34 @@ class PlaceList(Resource):
             'image': place.image,
             'link': place.link,
             'location_id': place.location_id,
-        } for place in places])
+            # Safely handle coordinates if they are not None
+            'lat': float(place.coordinates.split(', ')[0]) if place.coordinates else None,  # Latitude
+            'lng': float(place.coordinates.split(', ')[1]) if place.coordinates else None   # Longitude
+        } for place in places], 200)
 
     def post(self):
         data = request.get_json()
+
+        # Check if coordinates are provided and validate the format
+        coordinates = data.get('coordinates', None)
+        if coordinates:
+            coordinates_parts = coordinates.split(', ')
+            if len(coordinates_parts) != 2:
+                return make_response({'error': 'Invalid coordinates format'}, 400)
+            try:
+                # Try to cast the coordinates to float
+                lat = float(coordinates_parts[0])
+                lng = float(coordinates_parts[1])
+            except ValueError:
+                return make_response({'error': 'Coordinates must be valid numbers'}, 400)
 
         new_place = Place(
             name=data['name'],
             description=data.get('description', ''),
             image=data.get('image', ''),
             link=data.get('link', ''),
-            location_id=data['location_id']
+            location_id=data.get('location_id'),  # Allow location_id to be null
+            coordinates=coordinates  # Coordinates can be null
         )
 
         db.session.add(new_place)
@@ -246,8 +263,13 @@ class PlaceList(Resource):
                 'image': new_place.image,
                 'link': new_place.link,
                 'location_id': new_place.location_id,
+                # Handle coordinates in response
+                'lat': float(new_place.coordinates.split(', ')[0]) if new_place.coordinates else None,  # Latitude
+                'lng': float(new_place.coordinates.split(', ')[1]) if new_place.coordinates else None   # Longitude
             }
-        })
+        }, 201)
+
+
 
 class SinglePlace(Resource):
     def get(self, place_id):
@@ -444,10 +466,9 @@ class LocationResource(Resource):
         location_list = []
 
         for location in locations:
-            if location.coordinates:  # Ensure coordinates exist
-                # Clean the coordinate string (remove the degree symbol and direction)
+            if location.coordinates: 
                 cleaned_coords = re.sub(r'[° NSEW]', '', location.coordinates).strip()
-                lat, lng = map(float, cleaned_coords.split(','))  # Parse latitude and longitude
+                lat, lng = map(float, cleaned_coords.split(','))  
 
                 location_list.append({
                     'id': location.id,
@@ -456,54 +477,9 @@ class LocationResource(Resource):
                     'lng': lng,
                 })
 
-        return location_list  # Return the list of locations as JSON
+        return location_list  
 
 # ------------------- Favorite API -------------------
-
-# class FavoriteList(Resource):
-#     def get(self):
-#         # If you want to fetch all global favorites as well as user-specific ones, just query them all
-#         favorites = Favorite.query.all()
-        
-#         return make_response([{
-#             'id': favorite.id,
-#             'user_id': favorite.user_id,
-#             'place_id': favorite.place_id,
-#             'created_at': favorite.created_at.isoformat(),
-#         } for favorite in favorites])
-
-#     def post(self):
-#         data = request.get_json()
-
-#         # If user_id is provided, use it, otherwise save as a global favorite
-#         user_id = data.get('user_id', None)  # Global if user_id is None
-#         place_id = data['place_id']
-
-#         # Check if the favorite already exists for the user or globally
-#         existing_favorite = Favorite.query.filter_by(user_id=user_id, place_id=place_id).first()
-#         if existing_favorite:
-#             return make_response({
-#                 'message': 'Place is already in favorites for this user or globally'
-#             }, 400)
-
-#         # Add the new favorite (user-specific or global)
-#         new_favorite = Favorite(
-#             user_id=user_id,  # This will be None for global favorites
-#             place_id=place_id
-#         )
-
-#         db.session.add(new_favorite)
-#         db.session.commit()
-
-#         return make_response({
-#             'message': 'Favorite added successfully',
-#             'favorite': {
-#                 'id': new_favorite.id,
-#                 'user_id': new_favorite.user_id,
-#                 'place_id': new_favorite.place_id,
-#                 'created_at': new_favorite.created_at.isoformat(),
-#             }
-#         }, 201)
 
 
 class SingleFavorite(Resource):
@@ -534,17 +510,17 @@ class AddToFavorites(Resource):
             if not place_id:
                 return make_response({'error': 'Missing user_id or place_id'}, 400)
 
-            # Check if the user and place exist
+            
             place = Place.query.get(place_id)
             if not place:
                 return make_response({'error': 'User or place not found'}, 404)
 
-            # Check if the place is already in the favorites
+            
             existing_favorite = Favorite.query.filter_by( place_id=place_id).first()
             if existing_favorite:
                 return make_response({'message': 'Place already in favorites'}, 200)
 
-            # Add the place to favorites
+           
             new_favorite = Favorite(place_id=place_id)
             db.session.add(new_favorite)
             db.session.commit()
@@ -575,7 +551,6 @@ class GetFavorites(Resource):
         if not favorite_places:
             return make_response({"message": "No favorite places found"}, 404)
         
-        # Assuming the Place model has a serialize method
         return make_response([place.serialize() for place in favorite_places], 200)
 
 class RemoveFromFavorites(Resource):
@@ -586,12 +561,11 @@ class RemoveFromFavorites(Resource):
         if not place_id:
             return make_response({'error': 'Missing place_id'}, 400)
 
-        # Find the favorite entry
         favorite = Favorite.query.filter_by(place_id=place_id).first()
         if not favorite:
             return make_response({'error': 'Place not in favorites'}, 404)
 
-        # Remove the entry
+        
         db.session.delete(favorite)
         db.session.commit()
 
@@ -606,12 +580,11 @@ class AddGlobalFavorite(Resource):
         if not place_id:
             return make_response({"error": "Place ID is required"}, 400)
         
-        # Check if the favorite already exists globally (with user_id=None)
         existing_favorite = Favorite.query.filter_by(place_id=place_id, user_id=None).first()
         if existing_favorite:
             return make_response({"message": "Place is already in global favorites"}, 400)
         
-        # Create a new favorite with user_id=None (global favorite)
+       
         favorite = Favorite(place_id=place_id, user_id=None, created_at=datetime.utcnow())
         db.session.add(favorite)
         db.session.commit()
@@ -626,7 +599,7 @@ class GetGlobalFavorites(Resource):
         if not global_favorites:
             return make_response({"message": "No global favorite places found"}, 404)
         
-        # Serialize the associated places for the global favorites
+        
         favorite_places = [favorite.place.serialize() for favorite in global_favorites]
         return make_response(favorite_places, 200)
 
@@ -642,13 +615,12 @@ class AddReservation(Resource):
             if not place_id:
                 return make_response({'error': 'Missing place_id'}, 400)
 
-            # Check if the place exists using db.session.get() (SQLAlchemy 2.0+ compatible)
             place = db.session.get(Place, place_id)
             if not place:
                 return make_response({'error': 'Place not found'}, 404)
 
-            # Add the place to the user's trips
-            new_trip = Trip(place_id=place_id)  # Assuming a Trip model
+            
+            new_trip = Trip(place_id=place_id)  
             db.session.add(new_trip)
             db.session.commit()
 
@@ -663,30 +635,27 @@ class GetTrips(Resource):
             # Fetch all trips from the database
             trips = Trip.query.all()
 
-            # Serialize trip data (ensure the Trip model has a serialize method)
+            
             trips_data = [trip.serialize() for trip in trips]
 
-            # Return a successful response with the serialized data
+           
             return make_response(jsonify(trips_data), 200)
         except Exception as e:
-            # Handle exceptions and return an error response
+            
             return make_response({'error': str(e)}, 500)
         
 class TripResource(Resource):
     # Delete a trip by its ID
     def delete(self, trip_id):
-        # Find the trip by its ID
+      
         trip = Trip.query.get(trip_id)
-        
-        # If trip doesn't exist, return a 404 error
+       
         if trip is None:
             return make_response(jsonify({"error": "Trip not found"}), 404)
         
-        # Delete the trip
         db.session.delete(trip)
         db.session.commit()
         
-        # Return a success message
         return make_response(jsonify({"message": f"Trip with id {trip_id} deleted successfully."}), 200)
 
 
@@ -695,40 +664,35 @@ class TripResource(Resource):
 
 
 # Add API resources to the API
-api.add_resource(GenerateText, '/generate-text')
 
+# API for AI Chatbot
+api.add_resource(GenerateText, '/generate-text')
+# API for User
 api.add_resource(UserList, '/users')
 api.add_resource(SingleUser, '/users/<int:user_id>')
 api.add_resource(RegisterUser, '/register')
 api.add_resource(LoginUser, '/login')
-
-
+# API for Mood
 api.add_resource(MoodList, '/moods')
 api.add_resource(SingleMood, '/moods/<int:mood_id>')
-
+# API for Place
 api.add_resource(PlaceList, '/places')
 api.add_resource(SinglePlace, '/places/<int:place_id>')
-
-
+api.add_resource(PlacesByLocation, '/places/by_location')
+api.add_resource(PlacesByMood, '/places/by_mood')
+# API for Location
 api.add_resource(LocationList, '/locations')
 api.add_resource(SingleLocation, '/locations/<int:location_id>')
 api.add_resource(LocationResource, '/api/locations')
-
-api.add_resource(PlacesByLocation, '/places/by_location')
-api.add_resource(PlacesByMood, '/places/by_mood')
-
-# api.add_resource(FavoriteList, '/favorites')
+# API for Favorite
 api.add_resource(SingleFavorite, '/favorites/<int:favorite_id>')
 api.add_resource(GetFavorites, '/favorites')
-
 api.add_resource(AddToFavorites, '/favorites/add')
-# api.add_resource(GetFavorites, '/favorites/<int:user_id>')
 api.add_resource(RemoveFromFavorites, '/favorites/remove')
 api.add_resource(UserFavorites, '/favorites/<int:user_id>')
-
 api.add_resource(AddGlobalFavorite, '/global_favorites/add')
 api.add_resource(GetGlobalFavorites, '/global_favorites')
-
+# API for Trip
 api.add_resource(AddReservation, '/reservations')
 api.add_resource(GetTrips, '/trips')
 api.add_resource(TripResource, '/trips/<int:trip_id>')

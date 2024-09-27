@@ -19,14 +19,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
-    _password_hash = db.Column(db.String(128), nullable=False)  # Storing hashed password
+    _password_hash = db.Column(db.String(128), nullable=False)  
 
     # Relationships 
     favorites = db.relationship('Favorite', back_populates='user')
     moods = db.relationship('Mood', back_populates='user')
 
 
-    # Property setter for password (this hashes the password when setting it)
+   
     @property
     def password(self):
         raise AttributeError('Password is not readable!')
@@ -48,7 +48,7 @@ class Favorite(db.Model):
     __tablename__ = 'favorites'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  # Keep as nullable
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  
     place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -89,7 +89,8 @@ class Place(db.Model):
     description = db.Column(db.Text, nullable=True)
     image = db.Column(db.String(255), nullable=True)
     link = db.Column(db.String(255), nullable=True)
-    location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=False)
+    location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=True)
+    coordinates = db.Column(db.String(100), nullable=True)
     
 
     # Relationships
@@ -128,11 +129,6 @@ class Location(db.Model):
         return f'<Location {self.city_name}>'
     
 
-    
-# class Trip(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
-#     place = db.relationship('Place', back_populates='trips')
 
 class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)

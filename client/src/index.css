@@ -640,3 +640,95 @@ html, body, #root {
 .App {
   height: 100%;
 }
+/* Form Container */
+.form-container {
+  max-width: 600px; /* Limit the width for better readability */
+  margin: 20px auto; /* Center the form */
+  padding: 20px; /* Add padding inside the container */
+  background-color: #fff; /* White background for contrast */
+  border-radius: 10px; /* Rounded corners for a softer look */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Form Title */
+.form-container h2 {
+  margin-bottom: 20px; /* Space below the title */
+  font-size: 1.75rem; /* Larger font size for the title */
+  color: #333; /* Dark gray for the title */
+  text-align: center; /* Center align the title */
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px; /* Space between groups */
+}
+
+/* Labels */
+.form-group label {
+  display: block; /* Block display for better alignment */
+  margin-bottom: 5px; /* Space below label */
+  font-weight: bold; /* Bold labels */
+}
+
+/* Input Fields */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%; /* Full width for inputs */
+  padding: 10px; /* Add padding for comfort */
+  margin-bottom: 5px; /* Space below fields */
+  border: 2px solid #ccc; /* Light gray border */
+  border-radius: 5px; /* Rounded corners for inputs */
+  font-size: 1rem; /* Font size for inputs */
+  color: #333; /* Text color */
+  transition: border-color 0.3s ease; /* Transition for border color */
+}
+
+/* Input Focus Styles */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: #007BFF; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Error Styles */
+.input-error {
+  border-color: red; /* Red border for errors */
+}
+
+/* Textarea Specific Styling */
+.form-textarea {
+  min-height: 100px; /* Minimum height for textarea */
+  resize: vertical; /* Allow vertical resizing only */
+}
+
+/* Submit Button */
+.form-button {
+  width: 100%; /* Full width button */
+  padding: 10px; /* Comfortable padding */
+  background-color: #007BFF; /* Primary blue color for button */
+  color: white; /* White text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1.2rem; /* Larger font size for the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transition for background color */
+}
+
+/* Button Hover Effect */
+.form-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+/* Error Message Styles */
+.error-message {
+  color: red; /* Red text for error messages */
+  font-size: 0.9rem; /* Slightly smaller font size */
+  margin-top: 5px; /* Space above error message */
+  text-align: left; /* Align error messages to the left */
+}
+
+
+
