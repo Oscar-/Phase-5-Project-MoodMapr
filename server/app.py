@@ -269,13 +269,6 @@ class PlaceList(Resource):
             }
         }, 201)
 
-
-
-from flask import request, make_response
-from flask_restful import Resource
-from models import Place  # assuming Place model is defined in models.py
-from app import db  # assuming you have db defined in your app
-
 class SinglePlace(Resource):
     def get(self, place_id):
         place = Place.query.get_or_404(place_id)
@@ -317,8 +310,7 @@ class SinglePlace(Resource):
 
         return make_response({'message': 'Place deleted successfully'})
 
-# Don't forget to add this route to your app
-# api.add_resource(SinglePlace, '/places/<int:place_id>')
+
 
 class PlacesByLocation(Resource):
     def get(self):

@@ -6,7 +6,7 @@ function PlaceDetail() {
   const [place, setPlace] = useState(null);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const [newImage, setNewImage] = useState('');  // State for the new image URL
+  const [newImage, setNewImage] = useState('');  
 
   useEffect(() => {
     fetch(`http://localhost:5555/places/${id}`)
@@ -31,7 +31,7 @@ function PlaceDetail() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        place_id: id,  // Use the current place's ID
+        place_id: id,  
       })
     })
     .then(response => response.json())
@@ -58,7 +58,7 @@ function PlaceDetail() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        image: newImage,  // Send only the new image URL in the request
+        image: newImage,  
       }),
     })
     .then(response => response.json())
@@ -66,7 +66,7 @@ function PlaceDetail() {
       if (data.message === 'Place updated successfully') {
         setPlace(prevPlace => ({
           ...prevPlace,
-          image: newImage,  // Update the local state with the new image URL
+          image: newImage,  
         }));
         setMessage('Image updated successfully!');
       } else {
@@ -94,7 +94,7 @@ function PlaceDetail() {
             <a href={place.link} className="detail-link" target="_blank" rel="noopener noreferrer">Visit</a>
             <button onClick={handleReservation} className="reserve-button">Reserve</button>
 
-            {/* Image Update Form */}
+          
             <form onSubmit={handleImageUpdate} className="update-image-form">
               <input
                 type="text"
