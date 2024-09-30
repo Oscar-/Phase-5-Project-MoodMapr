@@ -83,7 +83,7 @@ Ensure the Flask server is running at http://127.0.0.1:5555.
 Make sure you have installed all dependencies for both the backend and frontend.
 Verify your API keys are correctly set in the existing .env file.
 
-### MOODMAPR 
+# MOODMAPR 
 
 1. A one sentence **description** of your app:
    
