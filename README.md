@@ -16,23 +16,23 @@
 2.1: Install Backend Dependencies
 Use Pipenv to install the required packages:
 
-bash
-Copy code
-pipenv install --dev
+   ```bash
+   pipenv install --dev
+
 2.2: Start the Flask Server
-Activate the virtual environment:
+1. Activate the virtual environment:
 
-bash
-Copy code
-pipenv shell
-Run the Flask server on port 5555:
+   ```bash
+   pipenv shell
 
-bash
-Copy code
-flask run --port 5555
+2. Run the Flask server on port 5555:
+
+   ```bash
+   flask run --port 5555
+
 The backend should now be running at http://127.0.0.1:5555.
 
-Step 3: Set Up the Frontend (React)
+## Step 3: Set Up the Frontend (React)
 3.1: Navigate to the Frontend Directory
 If your React app is in a separate folder (e.g., client), navigate to that directory:
 
