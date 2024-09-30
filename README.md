@@ -64,7 +64,7 @@ Add the following line to the .env file:
 plaintext
 
       
-      OPENAI_API_KEY=sk-proj-      Oqaam7vGX1TjHnDeROJ1PNYvkgRV4DswByG7OINZyfSanMaxor6wnq59jCKhFkER490IAYqReVT3BlbkFJDgpVTf6tdntOa0MhhrfDzdtMySa60blORl1Zn8KjotJKex8YQmqYKGNHUlzGVY0JMXHbv6EmwA
+      OPENAI_API_KEY=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
 
 Make sure to save the changes to the .env file.
 Usage:
