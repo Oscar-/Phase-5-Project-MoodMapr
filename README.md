@@ -21,7 +21,7 @@ Use Pipenv to install the required packages:
 2.2: Start the Flask Server
 1. Activate the virtual environment:
    
-      ```bash
+      ```
       pipenv shell
 
 2. Run the Flask server on port 5555:
