@@ -35,7 +35,7 @@ The backend should now be running at http://127.0.0.1:5555.
 3.1: Navigate to the Frontend Directory
 If your React app is in a separate folder (e.g., client), navigate to that directory:
 
-      ```bash
+      
       cd client
 
 3.2: Install Frontend Dependencies
