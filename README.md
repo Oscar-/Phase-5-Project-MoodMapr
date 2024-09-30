@@ -15,20 +15,17 @@
 ## Step 2: Set Up the Backend (Flask)
 2.1: Install Backend Dependencies
 Use Pipenv to install the required packages:
-
-   ```bash
-   pipenv install --dev
+      ```bash
+      pipenv install --dev
 
 2.2: Start the Flask Server
 1. Activate the virtual environment:
-
-   ```bash
-   pipenv shell
+      ```bash
+      pipenv shell
 
 2. Run the Flask server on port 5555:
-
-   ```bash
-   flask run --port 5555
+      ```bash
+      flask run --port 5555
 
 The backend should now be running at http://127.0.0.1:5555.
 
@@ -36,24 +33,24 @@ The backend should now be running at http://127.0.0.1:5555.
 3.1: Navigate to the Frontend Directory
 If your React app is in a separate folder (e.g., client), navigate to that directory:
 
-bash
-Copy code
-cd client
+      ```bash
+      cd client
+
 3.2: Install Frontend Dependencies
 Install the required Node.js packages:
 
-bash
-Copy code
-npm install
+      ```bash
+      npm install
+
 3.3: Start the React Development Server
 Run the React app:
 
-bash
-Copy code
-npm start
+      ```bash
+      npm start
+
 Your React app should now be running at http://localhost:3000.
 
-Step 4: API Key Setup Instructions
+## Step 4: API Key Setup Instructions
 Obtain Your OpenAI API Key (Optional):
 
 If you'd like to use your own OpenAI API key, go to the OpenAI website and sign up or log in to your account.
@@ -69,7 +66,8 @@ Make sure to save the changes to the .env file.
 Usage:
 
 When running the app, the application will access the OpenAI API key from the .env file.
-Step 5: Using the App
+
+## Step 5: Using the App
 Open your web browser.
 
 Go to http://localhost:3000 to access the Mood Mapr app.
