@@ -1,15 +1,11 @@
-## Mood Mapr: Setup Instructions
+# Mood Mapr: Terminal Setup Instructions
 
-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
+## Step 1: Clone the Project Repository
+1. Open your terminal.
+2. Run the following command to clone the repository (replace `yourusername` with your GitHub username):
+   ```bash
+   git clone https://github.com/yourusername/mood-mapr.git
 
-Step 1: Clone the Project Repository
-
-1. Open your terminal
-
-2. Run the following command to clone the repository (replace yourusername with your GitHub username):
-
-Copy code
-####### git clone https://github.com/yourusername/mood-mapr.git
 
 Change to the project directory:
 
