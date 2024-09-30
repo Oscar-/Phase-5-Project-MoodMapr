@@ -62,8 +62,9 @@ Set Up the .env File:
 In the root directory of your project, there should already be a .env file. Open this file in a text editor.
 Add the following line to the .env file:
 plaintext
+
       ```bash
-      OPENAI_API_KEY=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
+      OPENAI_API_KEY=sk-proj-      Oqaam7vGX1TjHnDeROJ1PNYvkgRV4DswByG7OINZyfSanMaxor6wnq59jCKhFkER490IAYqReVT3BlbkFJDgpVTf6tdntOa0MhhrfDzdtMySa60blORl1Zn8KjotJKex8YQmqYKGNHUlzGVY0JMXHbv6EmwA
 
 Make sure to save the changes to the .env file.
 Usage:
@@ -81,6 +82,8 @@ If you encounter issues, check the following:
 Ensure the Flask server is running at http://127.0.0.1:5555.
 Make sure you have installed all dependencies for both the backend and frontend.
 Verify your API keys are correctly set in the existing .env file.
+
+### MOODMAPR 
 
 1. A one sentence **description** of your app:
    
