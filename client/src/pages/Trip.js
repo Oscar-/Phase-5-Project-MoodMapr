@@ -111,7 +111,6 @@ function Trip() {
               <h3>{trip.place.name}</h3>
               <p>{trip.place.description}</p>
               <a href={trip.place.link} target="_blank" rel="noopener noreferrer" className="visit-link">Visit</a>
-              {/* Delete button */}
               <button className="delete-button" onClick={() => handleDelete(trip.id)}>Remove</button>
             </div>
           ))}

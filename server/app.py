@@ -271,6 +271,11 @@ class PlaceList(Resource):
 
 
 
+from flask import request, make_response
+from flask_restful import Resource
+from models import Place  # assuming Place model is defined in models.py
+from app import db  # assuming you have db defined in your app
+
 class SinglePlace(Resource):
     def get(self, place_id):
         place = Place.query.get_or_404(place_id)
@@ -287,16 +292,9 @@ class SinglePlace(Resource):
         place = Place.query.get_or_404(place_id)
         data = request.get_json()
 
-        if 'name' in data:
-            place.name = data['name']
-        if 'description' in data:
-            place.description = data['description']
+        # Update only the image if it's in the request data
         if 'image' in data:
             place.image = data['image']
-        if 'link' in data:
-            place.link = data['link']
-        if 'location_id' in data:
-            place.location_id = data['location_id']
 
         db.session.commit()
 
@@ -318,7 +316,10 @@ class SinglePlace(Resource):
         db.session.commit()
 
         return make_response({'message': 'Place deleted successfully'})
-    
+
+# Don't forget to add this route to your app
+# api.add_resource(SinglePlace, '/places/<int:place_id>')
+
 class PlacesByLocation(Resource):
     def get(self):
         city_name = request.args.get('city', '').strip().lower()  # Get the city query parameter and convert to lowercase

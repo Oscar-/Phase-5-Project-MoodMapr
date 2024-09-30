@@ -5,7 +5,8 @@ function PlaceDetail() {
   const { id } = useParams();
   const [place, setPlace] = useState(null);
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');  
+  const [message, setMessage] = useState('');
+  const [newImage, setNewImage] = useState('');  // State for the new image URL
 
   useEffect(() => {
     fetch(`http://localhost:5555/places/${id}`)
@@ -31,20 +32,50 @@ function PlaceDetail() {
       },
       body: JSON.stringify({
         place_id: id,  // Use the current place's ID
-        
       })
     })
     .then(response => response.json())
     .then(data => {
       if (data.error) {
-        setMessage(data.error); 
+        setMessage(data.error);
       } else {
-        setMessage('Place reserved successfully!');  
+        setMessage('Place reserved successfully!');
       }
     })
     .catch(error => {
       console.error('Reservation error:', error);
       setMessage('Error making reservation');
+    });
+  };
+
+  // Function to handle image update
+  const handleImageUpdate = (e) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:5555/places/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        image: newImage,  // Send only the new image URL in the request
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Place updated successfully') {
+        setPlace(prevPlace => ({
+          ...prevPlace,
+          image: newImage,  // Update the local state with the new image URL
+        }));
+        setMessage('Image updated successfully!');
+      } else {
+        setMessage('Error updating image');
+      }
+    })
+    .catch(error => {
+      console.error('Image update error:', error);
+      setMessage('Error updating image');
     });
   };
 
@@ -61,7 +92,19 @@ function PlaceDetail() {
             <h2>{place.name}</h2>
             <p>{place.description}</p>
             <a href={place.link} className="detail-link" target="_blank" rel="noopener noreferrer">Visit</a>
-            <button onClick={handleReservation} className="reserve-button">Reserve</button>  {/* Reserve button */}
+            <button onClick={handleReservation} className="reserve-button">Reserve</button>
+
+            {/* Image Update Form */}
+            <form onSubmit={handleImageUpdate} className="update-image-form">
+              <input
+                type="text"
+                placeholder="Enter new image URL"
+                value={newImage}
+                onChange={(e) => setNewImage(e.target.value)}
+                required
+              />
+              <button type="submit" className="update-button">Update Image</button>
+            </form>
           </div>
         </div>
       ) : (
