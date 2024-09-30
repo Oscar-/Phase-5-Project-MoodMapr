@@ -1,4 +1,89 @@
-# Phase-5-Project-MoodMapr
+## Mood Mapr: Setup Instructions
+
+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
+
+Step 1: Clone the Project Repository
+
+1. Open your terminal
+
+2. Run the following command to clone the repository (replace yourusername with your GitHub username):
+
+Copy code
+### git clone https://github.com/yourusername/mood-mapr.git
+
+Change to the project directory:
+
+bash
+Copy code
+cd mood-mapr
+Step 2: Set Up the Backend (Flask)
+2.1: Install Backend Dependencies
+Use Pipenv to install the required packages:
+
+bash
+Copy code
+pipenv install --dev
+2.2: Start the Flask Server
+Activate the virtual environment:
+
+bash
+Copy code
+pipenv shell
+Run the Flask server on port 5555:
+
+bash
+Copy code
+flask run --port 5555
+The backend should now be running at http://127.0.0.1:5555.
+
+Step 3: Set Up the Frontend (React)
+3.1: Navigate to the Frontend Directory
+If your React app is in a separate folder (e.g., client), navigate to that directory:
+
+bash
+Copy code
+cd client
+3.2: Install Frontend Dependencies
+Install the required Node.js packages:
+
+bash
+Copy code
+npm install
+3.3: Start the React Development Server
+Run the React app:
+
+bash
+Copy code
+npm start
+Your React app should now be running at http://localhost:3000.
+
+Step 4: API Key Setup Instructions
+Obtain Your OpenAI API Key (Optional):
+
+If you'd like to use your own OpenAI API key, go to the OpenAI website and sign up or log in to your account.
+Navigate to the API section to generate your own API key. However, for testing purposes, you can use the provided key.
+Set Up the .env File:
+
+In the root directory of your project, there should already be a .env file. Open this file in a text editor.
+Add the following line to the .env file:
+plaintext
+Copy code
+OPENAI_API_KEY=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
+Make sure to save the changes to the .env file.
+Usage:
+
+When running the app, the application will access the OpenAI API key from the .env file.
+Step 5: Using the App
+Open your web browser.
+
+Go to http://localhost:3000 to access the Mood Mapr app.
+
+Troubleshooting
+If you encounter issues, check the following:
+
+Ensure the Flask server is running at http://127.0.0.1:5555.
+Make sure you have installed all dependencies for both the backend and frontend.
+Verify your API keys are correctly set in the existing .env file.
 
 1. A one sentence **description** of your app:
    
