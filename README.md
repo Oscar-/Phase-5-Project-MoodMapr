@@ -15,13 +15,14 @@
 ## Step 2: Set Up the Backend (Flask)
 2.1: Install Backend Dependencies
 Use Pipenv to install the required packages:
+
       ```bash
       pipenv install --dev
 
 2.2: Start the Flask Server
 1. Activate the virtual environment:
    
-      ```
+      ```bash
       pipenv shell
 
 2. Run the Flask server on port 5555:
