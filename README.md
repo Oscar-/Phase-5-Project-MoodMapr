@@ -12,7 +12,7 @@
 ```bash
 cd mood-mapr
 
-Step 2: Set Up the Backend (Flask)
+## Step 2: Set Up the Backend (Flask)
 2.1: Install Backend Dependencies
 Use Pipenv to install the required packages:
 
