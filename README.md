@@ -41,13 +41,13 @@ If your React app is in a separate folder (e.g., client), navigate to that direc
 3.2: Install Frontend Dependencies
 Install the required Node.js packages:
 
-      ```bash
+   
       npm install
 
 3.3: Start the React Development Server
 Run the React app:
 
-      ```bash
+      
       npm start
 
 Your React app should now be running at http://localhost:3000.
@@ -63,7 +63,7 @@ In the root directory of your project, there should already be a .env file. Open
 Add the following line to the .env file:
 plaintext
 
-      ```bash
+      
       OPENAI_API_KEY=sk-proj-      Oqaam7vGX1TjHnDeROJ1PNYvkgRV4DswByG7OINZyfSanMaxor6wnq59jCKhFkER490IAYqReVT3BlbkFJDgpVTf6tdntOa0MhhrfDzdtMySa60blORl1Zn8KjotJKex8YQmqYKGNHUlzGVY0JMXHbv6EmwA
 
 Make sure to save the changes to the .env file.
