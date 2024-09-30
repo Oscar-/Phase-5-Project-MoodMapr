@@ -9,7 +9,7 @@ Step 1: Clone the Project Repository
 2. Run the following command to clone the repository (replace yourusername with your GitHub username):
 
 Copy code
-###### git clone https://github.com/yourusername/mood-mapr.git
+####### git clone https://github.com/yourusername/mood-mapr.git
 
 Change to the project directory:
 
