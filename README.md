@@ -9,8 +9,8 @@
 
 3. Change to the project directory:
 
-```bash
-cd mood-mapr
+   ```bash
+   cd mood-mapr
 
 ## Step 2: Set Up the Backend (Flask)
 2.1: Install Backend Dependencies
