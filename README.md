@@ -62,12 +62,13 @@ Set Up the .env File:
 
 In the root directory of your project, there should already be a .env file. Open this file in a text editor.
 Add the following line to the .env file:
-plaintext
 
+plaintext
       
       OPENAI_API_KEY=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
 
 Make sure to save the changes to the .env file.
+
 Usage:
 
 When running the app, the application will access the OpenAI API key from the .env file.
