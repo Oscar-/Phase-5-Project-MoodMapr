@@ -7,11 +7,11 @@
    git clone https://github.com/yourusername/mood-mapr.git
 
 
-Change to the project directory:
+3. Change to the project directory:
 
-bash
-Copy code
+```bash
 cd mood-mapr
+
 Step 2: Set Up the Backend (Flask)
 2.1: Install Backend Dependencies
 Use Pipenv to install the required packages:
