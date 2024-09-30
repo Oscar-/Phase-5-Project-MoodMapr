@@ -60,8 +60,9 @@ Set Up the .env File:
 In the root directory of your project, there should already be a .env file. Open this file in a text editor.
 Add the following line to the .env file:
 plaintext
-Copy code
-OPENAI_API_KEY=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
+      ```bash
+      OPENAI_API_KEY=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
+
 Make sure to save the changes to the .env file.
 Usage:
 
