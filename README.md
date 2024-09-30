@@ -6,34 +6,56 @@ MoodMapr: A personalized travel app that curates destinations and experiences ba
 
 2. A **wireframe** using Figma, DrawIO, etc:
    
-![Screenshot 2024-09-17 at 9 03 38 AM](https://github.com/user-attachments/assets/600b0186-9f18-4c1a-a12b-caaf78c86a66)
+<img width="462" alt="Screenshot 2024-09-30 at 2 42 49 PM" src="https://github.com/user-attachments/assets/cc2b9ff4-cabb-4a5e-85d4-329d3cfb0c14">
 
-![Screenshot 2024-09-17 at 9 03 49 AM](https://github.com/user-attachments/assets/baf10ea7-f999-421a-a833-0d5c8eae1351)
+
+<img width="440" alt="Screenshot 2024-09-30 at 2 42 59 PM" src="https://github.com/user-attachments/assets/bde2255f-a32a-43f8-bf49-a853f8b8feec">
+
+
+<img width="547" alt="Screenshot 2024-09-30 at 2 43 08 PM" src="https://github.com/user-attachments/assets/90ad9069-88f9-4769-afba-ff55c78154ad">
+
+
+<img width="402" alt="Screenshot 2024-09-30 at 2 43 19 PM" src="https://github.com/user-attachments/assets/13cedc28-ea9b-4ac8-b8d5-336516e3681c">
+
+
+<img width="433" alt="Screenshot 2024-09-30 at 2 43 27 PM" src="https://github.com/user-attachments/assets/bb0d57a7-d627-43d9-be21-b085c33f9146">
+
+
+<img width="431" alt="Screenshot 2024-09-30 at 2 43 37 PM" src="https://github.com/user-attachments/assets/08e50357-cfbf-44ea-b44b-0386004111c4">
+
+
+
+
 
 
 3. **User Stories**:
 
-<img width="575" alt="Screenshot 2024-09-16 at 11 55 36 AM" src="https://github.com/user-attachments/assets/821ecf45-2ff5-4cbe-ae80-9d24b69c86ac">
+<img width="540" alt="Screenshot 2024-09-30 at 1 33 37 PM" src="https://github.com/user-attachments/assets/2c2e3981-f72a-4ce4-a4fc-857749f88290">
+
 
 
 
 4. A React **tree diagram**: recommend sketch out properties/states/callback functions:
 
- ![Screenshot 2024-09-17 at 9 17 46 AM](https://github.com/user-attachments/assets/7a4b645b-0d7f-4e3c-a4ad-6d1f7c610a67)
+<img width="723" alt="Screenshot 2024-09-30 at 2 00 59 PM" src="https://github.com/user-attachments/assets/77d79e5b-9593-49b4-97bb-856bc2969cc8">
+
 
 
 5. A screenshot of your **schema**: include validations/constraints/anything else:
 
-   <img width="1181" alt="Screenshot 2024-09-16 at 3 16 03 PM" src="https://github.com/user-attachments/assets/e4125bdb-3c40-479f-85bb-09adebea8c0e">
+<img width="1432" alt="Screenshot 2024-09-30 at 2 56 59 PM" src="https://github.com/user-attachments/assets/f77d54ac-aec8-4819-ad76-2d81e706bdad">
+
 
 
 6. A list of your **API routes** (includes HTTP Verb, Endpoint, Purpose):
 
-<img width="514" alt="Screenshot 2024-09-16 at 4 21 56 PM" src="https://github.com/user-attachments/assets/3b0a25ae-8e7b-4c9e-97fb-19f2746533cf">
+<img width="729" alt="Screenshot 2024-09-30 at 2 17 11 PM" src="https://github.com/user-attachments/assets/8b40d75f-5a08-454f-bef8-7b689b4b459a">
+
 
 React Routes: 
 
-<img width="650" alt="Screenshot 2024-09-16 at 4 11 57 PM" src="https://github.com/user-attachments/assets/c2aa4866-0642-454d-8d23-66ce1d793f3c">
+<img width="632" alt="Screenshot 2024-09-30 at 3 03 14 PM" src="https://github.com/user-attachments/assets/20b51616-8b76-47f6-8f23-3bfa357b493e">
+
 
 
 7. Three **stretch goals**:
