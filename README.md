@@ -18,6 +18,7 @@ Use Pipenv to install the required packages:
 
 
       pipenv install --dev
+      pipenv run pip install Flask-SQLAlchemy Flask-Migrate Flask-RESTful python-dotenv openai==0.28
 
 2.2: Start the Flask Server
 1. Activate the virtual environment:
